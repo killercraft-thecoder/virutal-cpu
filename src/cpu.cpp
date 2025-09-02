@@ -1,5 +1,64 @@
 #include "cpu.h"
 
+// Cycle counts for each opcode (0x00–0xFF)
+// Unused opcodes default to 0 cycles for now.
+static const uint8_t CYCLES[256] = {
+    /*0x00*/ 2, // NOP
+    /*0x01*/ 4, // LDA abs
+    /*0x02*/ 5, // STA abs
+    /*0x03*/ 2, // ADD (A = A + X)
+    /*0x04*/ 2, // SUB (A = A - X)
+    /*0x05*/ 2, // INC A
+    /*0x06*/ 2, // DEC A
+    /*0x07*/ 2, // XTA
+    /*0x08*/ 2, // ATX
+    /*0x09*/ 4, // LDX abs
+    /*0x0A*/ 5, // STX abs
+    /*0x0B*/ 3, // BR rel (not taken: 3, taken: +1 in exec)
+    /*0x0C*/ 4, // BNZ abs (not taken: 4, taken: +1 in exec)
+    /*0x0D*/ 4, // BZ abs
+    /*0x0E*/ 4, // BN abs
+    /*0x0F*/ 4, // BP abs
+    /*0x10*/ 6, // JSR abs
+    /*0x11*/ 4, // RTS
+    /*0x12*/ 5, // BSR rel
+    /*0x13*/ 4, // BC abs
+    /*0x14*/ 3, // BCR rel
+    /*0x15*/ 3, // BNR rel
+    /*0x16*/ 3, // BPR rel
+    /*0x17*/ 4, // BP abs
+    /*0x18*/ 4, // BN abs
+    /*0x19*/ 3, // XSRA
+    /*0x1A*/ 3, // XSLA
+    /*0x1B*/ 3, // ASRX
+    /*0x1C*/ 3, // ASLX
+    /*0x1D*/ 2, // AND
+    /*0x1E*/ 2, // OR
+    /*0x1F*/ 2, // XOR/EOR
+    /*0x20*/ 2, // CLF
+    /*0x21*/ 2, // CLC
+    /*0x22*/ 2, // CLN
+    /*0x23*/ 2, // CLZ
+    /*0x24*/ 2, // XXA
+    /*0x25*/ 5, // BRR rel
+    /*0x26*/ 4, // RTR
+    /*0x27*/ 3, // BA
+    /*0x28*/ 2, // ADDF
+    /*0x29*/ 2, // SUBF
+    /*0x2A*/ 4, // BNC abs
+    /*0x2B*/ 3, // BNCR rel
+    /*0x2C*/ 3, // PHA
+    /*0x2D*/ 3, // PLA
+    /*0x2E*/ 3, // PHX
+    /*0x2F*/ 3, // PLX
+    /*0x30*/ 2, // NOTA
+    /*0x31*/ 2, // NOTX
+    /*0x32*/ 2, // NEG
+    /*0x33*/ 2, // SWAP
+    // 0x34–0xFD unused
+    [0xFF] = 2 // HALT
+};
+
 void CPU::reset(uint16_t start_addr)
 {
     A = X = 0;
@@ -74,6 +133,11 @@ void CPU::run()
 
 void CPU::step()
 {
+    if (cycles > 0)
+    {
+        cycles--;
+        return;
+    } // still penalty
     if (_halted)
         return;
     uint8_t op = read(PC++);
@@ -114,6 +178,7 @@ void CPU::step()
         uint8_t hi = read(PC++);
         if (!(P & Z))
             PC = uint16_t(lo) | (uint16_t(hi) << 8);
+            cycles++;
     }
     break;
     case 0x06: // BZ: branch if Z==1
@@ -122,6 +187,7 @@ void CPU::step()
         uint8_t hi = read(PC++);
         if (P & Z)
             PC = uint16_t(lo) | (uint16_t(hi) << 8);
+            cycles++;
     }
     break;
     case 0x07: // STX: SP -> X
@@ -227,6 +293,7 @@ void CPU::step()
         if (P & N)
         { // Negative flag set
             PC = addr;
+            cycles++;
         }
     }
     break;
@@ -237,6 +304,7 @@ void CPU::step()
         if (P & N)
         { // Negative flag set
             PC = uint16_t(PC + off);
+            cycles++;
         }
     }
     break;
@@ -247,6 +315,7 @@ void CPU::step()
         if (!(P & N))
         { // Negative flag clear
             PC = uint16_t(PC + off);
+            cycles++;
         }
     }
     break;
@@ -259,6 +328,7 @@ void CPU::step()
         if (!(P & N))
         { // N clear
             PC = addr;
+            cycles++;
         }
     }
     break;
@@ -271,6 +341,7 @@ void CPU::step()
         if (P & C)
         {
             PC = addr;
+            cycles++;
         }
     }
     break;
@@ -281,6 +352,7 @@ void CPU::step()
         if (P & C)
         {
             PC = uint16_t(PC + off);
+            cycles++;
         }
     }
     break;
@@ -451,6 +523,7 @@ void CPU::step()
         if (!(P & C))
         { // Carry clear
             PC = addr;
+            cycles++;
         }
     }
     break;
@@ -461,6 +534,7 @@ void CPU::step()
         if (!(P & C))
         { // Carry clear
             PC = uint16_t(PC + off);
+            cycles++;
         }
     }
     break;
@@ -525,4 +599,6 @@ void CPU::step()
         // NOP for unknown opcodes
         break;
     }
+    // Add base cycles from the table
+    cycles += CYCLES[op];
 }

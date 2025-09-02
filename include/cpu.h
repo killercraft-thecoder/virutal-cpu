@@ -11,6 +11,7 @@ struct CPU
     uint8_t SP = 0xFF;
     uint16_t PC = 0;
     uint8_t P = 0;        // bit0=C, bit1=Z, bit6=V, bit7=N
+    uint32_t cycles = 0;
     bool _halted = false; // for faster emualtion only
 
     // Memory
