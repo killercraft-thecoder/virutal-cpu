@@ -83,3 +83,7 @@ This document lists all **53** currently implemented opcodes for the Virtual CPU
   - All arithmetic and logical operations update **N** and **Z**.  
   - ADD/SUB and their variants also update **C** and **V**.  
   - Flag‑only operations (e.g., `CLC`, `CLF`, `CLN`, `CLZ`) directly modify specific bits in `P` without affecting others.
+
+## Clock Rate
+
+In a hypothetical hardware implementation using technology comparable to late 1970s or early 1980s microprocessors, this CPU would be expected to operate reliably at approximately **3 MHz**. At this frequency, and given the average cycles per instruction for the current instruction set, the effective throughput would be on the order of 1 MIPS. This performance is consistent with higher‑end home computers of the early 1980s, while remaining well within the capabilities of period‑appropriate memory and peripheral interfaces.
