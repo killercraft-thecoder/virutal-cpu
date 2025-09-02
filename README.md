@@ -52,6 +52,10 @@ This document lists all currently implemented opcodes for the Virtual CPU, their
 | 0x2D | PLA       | 1 | Pull (pop) into A from stack, set N/Z. |
 | 0x2E | PHX       | 1 | Push X onto stack. |
 | 0x2F | PLX       | 1 | Pull (pop) into X from stack, set N/Z. |
+| 0x30 | NOTA      | 1 | Bitwise NOT (invert) A, set N/Z. |
+| 0x31 | NOTX      | 1 | Bitwise NOT (invert) X, set N/Z. |
+| 0x32 | NEG       | 1 | Two’s complement negate A (A = -A), set N/Z/C/V. |
+| 0x33 | SWAP      | 1 | Swap A and X. |
 | 0xFF | HALT     | 1  | Halt execution. |
 
 ---
