@@ -1,6 +1,6 @@
 # Virtual CPU – Instruction Set Reference
 
-This document lists all currently implemented opcodes for the Virtual CPU, their hex codes, sizes, and descriptions.
+This document lists all **53** currently implemented opcodes for the Virtual CPU, along with their hex codes, instruction sizes, and descriptions for quick reference.
 
 | Hex  | Mnemonic | Size (bytes) | Description |
 |------|----------|--------------|-------------|
@@ -61,11 +61,21 @@ This document lists all currently implemented opcodes for the Virtual CPU, their
 ---
 
 ## Notes
-- **abs** = absolute 16‑bit address operand.
-- **rel** = signed 8‑bit offset relative to the next instruction.
-- Flags:  
-  - **N** = Negative  
-  - **Z** = Zero  
-  - **C** = Carry  
-  - **V** = Overflow
-- All arithmetic and logic ops update N/Z; ADD/SUB variants also update C/V.
+
+- **Addressing modes**:  
+  - **abs** — Absolute addressing; a full 16‑bit address operand is provided.  
+  - **rel** — Relative addressing; an 8‑bit signed offset is applied to the program counter (PC) relative to the next instruction.
+
+- **Processor status flags** (in the `P` register):  
+  - **N** — Negative flag. Set if the result of the last operation has bit 7 = 1.  
+  - **Z** — Zero flag. Set if the result of the last operation is zero.  
+  - **C** — Carry flag. Set if an addition produces a carry out of bit 7, or a subtraction does not require a borrow.  
+  - **V** — Overflow flag. Set if a signed addition or subtraction results in a value outside the range −128 to +127.  
+  - **H** — Halt flag. Set when the CPU is halted; execution stops until reset.  
+  - **I** — Interrupt disable flag *(currently unused)*. Intended to mask interrupt handling when implemented.  
+  - **B** — Break flag *(currently unused)*. Reserved for software breakpoints or system calls.
+
+- **Flag updates**:  
+  - All arithmetic and logical operations update **N** and **Z**.  
+  - ADD/SUB and their variants also update **C** and **V**.  
+  - Flag‑only operations (e.g., `CLC`, `CLF`, `CLN`, `CLZ`) directly modify specific bits in `P` without affecting others.
