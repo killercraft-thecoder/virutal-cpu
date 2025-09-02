@@ -113,3 +113,7 @@ For context, the estimated performance of this CPU at 3 MHz (≈ 0.75–1.0�
 | **This CPU (hypothetical HW)** | —    | 3.0 MHz    | ~0.75–1.0    |
 
 While not matching the raw throughput of later 16/32‑bit processors, this design would have been competitive with — and in some cases faster than — many 8‑bit systems of its era. In the early 1980s, performance in the 1 MIPS range was considered high‑end for consumer hardware, approaching the capabilities of earlier workstation‑class machines.
+
+## Design Era Context
+
+A CPU of this performance class and clock rate would have been well‑suited to the demands of early‑ to mid‑1980s home computing. At approximately 1 MIPS, it could comfortably support text‑based applications, 2D tile‑based or sprite‑driven games, simple graphical user interfaces, and basic productivity software such as word processors and spreadsheets. Systems in this range were also capable of handling modest real‑time control tasks, educational software, and early networking or modem‑based communications. While not intended for heavy 3D graphics or large‑scale multitasking, such a processor would have provided a responsive, versatile platform for the era’s typical workloads.
