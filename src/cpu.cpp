@@ -443,6 +443,80 @@ void CPU::step()
     }
     break;
 
+    case 0x2A: // BNC abs16
+    {
+        uint8_t lo = read(PC++);
+        uint8_t hi = read(PC++);
+        uint16_t addr = (uint16_t(hi) << 8) | lo;
+        if (!(P & C))
+        { // Carry clear
+            PC = addr;
+        }
+    }
+    break;
+
+    case 0x2B: // BNCR rel8
+    {
+        int8_t off = (int8_t)read(PC++);
+        if (!(P & C))
+        { // Carry clear
+            PC = uint16_t(PC + off);
+        }
+    }
+    break;
+
+    case 0x2C: // PHA
+        push8(A);
+        break;
+
+    case 0x2D: // PLA
+        A = pop8();
+        setNZ(A);
+        break;
+
+    case 0x2E: // PHX
+        push8(X);
+        break;
+
+    case 0x2F: // PLX
+        X = pop8();
+        setNZ(X);
+        break;
+
+    case 0x30: // NOTA
+        A = ~A;
+        setNZ(A);
+        break;
+
+    case 0x31: // NOTX
+        X = ~X;
+        setNZ(X);
+        break;
+
+    case 0x32: // NEG
+    {
+        uint8_t oldA = A;
+        A = (~A) + 1;
+        P &= ~(N | Z | C | V);
+        if (A == 0)
+            P |= Z;
+        if (A & 0x80)
+            P |= N;
+        if (A != 0)
+            P |= C; // carry set if not zero after negate
+        if (((oldA ^ A) & 0x80) != 0)
+            P |= V;
+    }
+    break;
+
+    case 0x33: // SWAP
+    {
+        uint8_t tmp = A;
+        A = X;
+        X = tmp;
+    }
+    break;
+
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag

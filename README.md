@@ -25,6 +25,8 @@ This document lists all currently implemented opcodes for the Virtual CPU, their
 | 0x12 | BSR rel  | 2  | Branch to subroutine (relative). |
 | 0x13 | BC abs   | 3  | Branch if C=1 (absolute). |
 | 0x14 | BCR rel  | 2  | Branch if C=1 (relative). |
+| 0x2A | BNC  abs  | 3 | Branch if Carry flag clear (C=0), absolute 16‑bit address. |
+| 0x2B | BNCR rel  | 2 | Branch if Carry flag clear (C=0), signed 8‑bit relative offset. |
 | 0x15 | BNR rel  | 2  | Branch if N=1 (relative). |
 | 0x16 | BPR rel  | 2  | Branch if N=0 (relative). |
 | 0x17 | BP abs   | 3  | Branch if N=0 (absolute). |
@@ -46,6 +48,10 @@ This document lists all currently implemented opcodes for the Virtual CPU, their
 | 0x27 | BA       | 1  | Branch relative using signed offset in A. |
 | 0x28 | ADDF     | 1  | Compute A+X, set flags only (no store). |
 | 0x29 | SUBF     | 1  | Compute A-X, set flags only (no store). |
+| 0x2C | PHA       | 1 | Push A onto stack. |
+| 0x2D | PLA       | 1 | Pull (pop) into A from stack, set N/Z. |
+| 0x2E | PHX       | 1 | Push X onto stack. |
+| 0x2F | PLX       | 1 | Pull (pop) into X from stack, set N/Z. |
 | 0xFF | HALT     | 1  | Halt execution. |
 
 ---
