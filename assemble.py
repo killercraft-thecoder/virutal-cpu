@@ -60,6 +60,8 @@ OPCODES = {
 'NOTX': 0x31,
 'NEG':  0x32,
 'SWAP': 0x33,
+'ADC':0x34,
+'SBC':0x35,
 }
 
 SIZES = {
@@ -101,6 +103,8 @@ SIZES = {
 0x31: 1,
 0x32: 1,
 0x33: 1,
+0x34:2,
+0x35:2,
 }
 
 # ---------------- Utilities ----------------
@@ -333,7 +337,22 @@ class Assembler:
                 pc += 1
                 continue
 
-            if op in (0x0B,0x12,0x18):  # BR or BSR
+            if size == 2:
+                # Immediate or zero-page style: single operand byte
+                if len(parts) != 2:
+                    self.errors.append(f"{file}:{ln}: {mnem} requires 1 operand")
+                    emit(0x00)
+                    pc += 2
+                    continue
+                val = self.eval_token(parts[1])
+                if val < 0 or val > 0xFF:
+                    self.errors.append(f"{file}:{ln}: operand out of range for {mnem}: {val}")
+                emit(val)
+                pc += 2
+                continue
+
+
+            if op in (0x0B, 0x12, 0x14, 0x15, 0x16, 0x18, 0x2B):  # BR or BSR
                 if len(parts) != 2:
                     self.errors.append(f"{file}:{ln}: {mnem} requires 1 operand")
                     emit(0x00)  # placeholder

@@ -178,7 +178,7 @@ void CPU::step()
         uint8_t hi = read(PC++);
         if (!(P & Z))
             PC = uint16_t(lo) | (uint16_t(hi) << 8);
-            cycles++;
+        cycles++;
     }
     break;
     case 0x06: // BZ: branch if Z==1
@@ -187,7 +187,7 @@ void CPU::step()
         uint8_t hi = read(PC++);
         if (P & Z)
             PC = uint16_t(lo) | (uint16_t(hi) << 8);
-            cycles++;
+        cycles++;
     }
     break;
     case 0x07: // STX: SP -> X
@@ -591,6 +591,32 @@ void CPU::step()
     }
     break;
 
+    case 0x34:
+    { // ADC #imm
+        uint8_t val = read(PC++);
+        uint16_t sum = uint16_t(A) + val + (P & C ? 1 : 0);
+        setFlag(C, sum > 0xFF);
+        uint8_t result = sum & 0xFF;
+        setFlag(Z, result == 0);
+        setFlag(N, result & 0x80);
+        // Overflow: if sign of A == sign of val, but sign of result != sign of A
+        setFlag(V, (~(A ^ val) & (A ^ result) & 0x80) != 0);
+        A = result;
+        break;
+    }
+    case 0x35:
+    { // SBC #imm
+        uint8_t val = read(PC++);
+        uint16_t diff = uint16_t(A) - val - ((P & C) ? 0 : 1);
+        setFlag(C, diff < 0x100); // C=1 if no borrow
+        uint8_t result = diff & 0xFF;
+        setFlag(Z, result == 0);
+        setFlag(N, result & 0x80);
+        setFlag(V, ((A ^ val) & (A ^ result) & 0x80) != 0);
+        A = result;
+        break;
+    }
+
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag
@@ -601,4 +627,12 @@ void CPU::step()
     }
     // Add base cycles from the table
     cycles += CYCLES[op];
+}
+
+inline void CPU::setFlag(int flag,bool cond) {
+    if (cond) {
+        P |= flag;
+    } else {
+        P &= flag;
+    }
 }

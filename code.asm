@@ -1,16 +1,37 @@
-.org $0000
+        .org $0000          ; Program origin — CPU will start executing here
 
-    ; A = mem[$1000]; loop: A += X; mem[$1000] = A; A--; if A != 0 -> loop
-    LDA $1000
+; ------------------------------------------------------------
+; Demo 1: Simple loop
+; Goal:
+;   1. Load A from memory at $1000
+;   2. Loop:
+;        A = A + X
+;        Store A into $9000
+;        Decrement A
+;        If A != 0, repeat loop
+; ------------------------------------------------------------
+
+        LDA $1000           ; Load A with value from RAM[$1000]
+
 loop:
-    ADD
-    STA $1000
-    DEC
-    BNZ loop
+        ADD                 ; A = A + X   (X is unchanged here)
+        STA $9000           ; Store A into RAM[$9000]
+        DEC                 ; A = A - 1
+        BNZ loop            ; Branch if A != 0 (NZ flag set) back to 'loop'
 
-    ; Show register moves
-    XTA        ; A = X
-    ATX        ; X = A
-    BR done    ; short relative jump
+; ------------------------------------------------------------
+; Demo 2: Register moves
+; Show how to copy between A and X
+; ------------------------------------------------------------
+
+        XTA                 ; Copy X into A  (A = X)
+        ATX                 ; Copy A into X  (X = A)
+
+; ------------------------------------------------------------
+; Demo 3: Short jump
+; ------------------------------------------------------------
+
+        BR done             ; Relative branch to 'done' label
+
 done:
-    B $0000    ; restart (just for demo)
+        B $0000             ; Absolute branch to $0000 — restart program
