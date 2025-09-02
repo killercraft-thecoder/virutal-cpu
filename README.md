@@ -56,7 +56,11 @@ This document lists all **53** currently implemented opcodes for the Virtual CPU
 | 0x31 | NOTX     | 1  | Bitwise NOT (invert) X, set N/Z. | 2 | No |
 | 0x32 | NEG      | 1  | Two’s complement negate A (A = -A), set N/Z/C/V. | 2 | No |
 | 0x33 | SWAP     | 1  | Swap A and X. | 2 | No |
+|------|----------|------|--------|-------------|
+| 0x36 | SETBRK   | 3    | 3      | Store a 16‑bit absolute address into the CPU’s break target register. Used with BRK to jump out of loops or blocks. | No |
+| 0x37 | BRK      | 1    | 1      | Jump to the address stored by SETBRK. Does not push return address; acts like a structured break in C/C++. | No |
 | 0xFF | HALT     | 1  | Halt execution. | 2 | No |
+
 
 ---
 

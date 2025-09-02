@@ -617,6 +617,19 @@ void CPU::step()
         break;
     }
 
+    case 0x36:
+    { // SETBRK abs16
+        uint8_t lo = read(PC++);
+        uint8_t hi = read(PC++);
+        break_addr = (uint16_t(hi) << 8) | lo;
+        break;
+    }
+    case 0x37:
+    { // BRK
+        PC = break_addr;
+        break;
+    }
+
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag
@@ -629,10 +642,14 @@ void CPU::step()
     cycles += CYCLES[op];
 }
 
-inline void CPU::setFlag(int flag,bool cond) {
-    if (cond) {
+inline void CPU::setFlag(int flag, bool cond)
+{
+    if (cond)
+    {
         P |= flag;
-    } else {
+    }
+    else
+    {
         P &= flag;
     }
 }

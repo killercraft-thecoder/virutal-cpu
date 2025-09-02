@@ -44,4 +44,5 @@ struct CPU
     void push8(uint8_t value);
     void CPU::setFlag(int flag,bool cond);
     uint8_t pop8();
+    uint16_t break_addr;
 };
