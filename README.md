@@ -87,3 +87,29 @@ This document lists all **53** currently implemented opcodes for the Virtual CPU
 ## Clock Rate
 
 In a hypothetical hardware implementation using technology comparable to late 1970s or early 1980s microprocessors, this CPU would be expected to operate reliably at approximately **3 MHz**. At this frequency, and given the average cycles per instruction for the current instruction set, the effective throughput would be on the order of 1 MIPS. This performance is consistent with higher‑end home computers of the early 1980s, while remaining well within the capabilities of period‑appropriate memory and peripheral interfaces.
+
+## Performance
+
+At the nominal clock rate of 3 MHz, and assuming an average instruction cost of 3–4 clock cycles, the CPU achieves an effective throughput of approximately **0.75–1.0 MIPS** (million instructions per second, this is approxmate and ausmes 3-4 clock cycles on avarge per isntrtion). This is comparable to the performance of higher‑end home computers of the early 1980s, while remaining well within the capabilities of period‑appropriate memory and peripheral hardware.
+
+The table below shows estimated effective instruction throughput at several representative clock rates:
+
+| Clock Rate | Avg. Cycles/Instr | Approx. MIPS |
+|------------|-------------------|--------------|
+| 1 MHz      | 3–4               | 0.25–0.33    |
+| 2 MHz      | 3–4               | 0.50–0.66    |
+| 3 MHz      | 3–4               | 0.75–1.00    |
+| 4 MHz      | 3–4               | 1.00–1.33    |
+
+## Historical Comparison
+
+For context, the estimated performance of this CPU at 3 MHz (≈ 0.75–1.0 MIPS) places it in the same general class as many popular home computers of the early 1980s:
+
+| CPU / System                  | Year | Clock Rate | Approx. MIPS |
+|--------------------------------|------|------------|--------------|
+| MOS 6502 (Apple II, C64)       | 1977 | 1.0 MHz    | ~0.3–0.5     |
+| Zilog Z80 (TRS‑80, ZX Spectrum)| 1976 | 3.5 MHz    | ~0.8–1.0     |
+| Motorola 68000 (Amiga, ST)     | 1984 | 7.16 MHz   | ~1.0–1.2     |
+| **This CPU (hypothetical HW)** | —    | 3.0 MHz    | ~0.75–1.0    |
+
+While not matching the raw throughput of later 16/32‑bit processors, this design would have been competitive with — and in some cases faster than — many 8‑bit systems of its era. In the early 1980s, performance in the 1 MIPS range was considered high‑end for consumer hardware, approaching the capabilities of earlier workstation‑class machines.
