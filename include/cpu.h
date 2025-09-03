@@ -42,7 +42,9 @@ struct CPU
     void setAddFlags(uint8_t a, uint8_t b, uint16_t res);
     void setSubFlags(uint8_t a, uint8_t b, uint16_t res);
     void push8(uint8_t value);
-    void CPU::setFlag(int flag,bool cond);
+    void setFlag(int flag,bool cond);
     uint8_t pop8();
     uint16_t break_addr;
+    uint8_t fetch8();
+    uint16_t read16();
 };

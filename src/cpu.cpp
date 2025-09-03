@@ -14,8 +14,8 @@ static const uint8_t CYCLES[256] = {
     /*0x08*/ 2, // ATX
     /*0x09*/ 4, // LDX abs
     /*0x0A*/ 5, // STX abs
-    /*0x0B*/ 3, // BR rel (not taken: 3, taken: +1 in exec)
-    /*0x0C*/ 4, // BNZ abs (not taken: 4, taken: +1 in exec)
+    /*0x0B*/ 3, // BR rel
+    /*0x0C*/ 4, // BNZ abs
     /*0x0D*/ 4, // BZ abs
     /*0x0E*/ 4, // BN abs
     /*0x0F*/ 4, // BP abs
@@ -55,7 +55,35 @@ static const uint8_t CYCLES[256] = {
     /*0x31*/ 2, // NOTX
     /*0x32*/ 2, // NEG
     /*0x33*/ 2, // SWAP
-    // 0x34–0xFD unused
+    /*0x34*/ 2, // (reserved/simple op)
+    /*0x35*/ 2, // (reserved/simple op)
+    /*0x36*/ 2, // (reserved/simple op)
+    /*0x37*/ 2, // (reserved/simple op)
+    /*0x38*/ 2, // ROL A
+    /*0x39*/ 2, // ROR A
+    /*0x3A*/ 2, // (reserved/simple op)
+    /*0x3B*/ 2, // (reserved/simple op)
+    /*0x3C*/ 2, // (reserved/simple op)
+    /*0x3D*/ 2, // (reserved/simple op)
+    /*0x3E*/ 2, // (reserved/simple op)
+    /*0x3F*/ 2, // (reserved/simple op)
+    /*0x40*/ 2, // ASL A
+    /*0x41*/ 2, // ASR A
+    /*0x42*/ 2, // (reserved/simple op)
+    /*0x43*/ 2, // (reserved/simple op)
+    /*0x44*/ 2, // (reserved/simple op)
+    /*0x45*/ 2, // (reserved/simple op)
+    /*0x46*/ 2, // (reserved/simple op)
+    /*0x47*/ 2, // (reserved/simple op)
+    /*0x48*/ 2, // (reserved/simple op)
+    /*0x49*/ 2, // (reserved/simple op)
+    /*0x4A*/ 2, // (reserved/simple op)
+    /*0x4B*/ 2, // (reserved/simple op)
+    /*0x4C*/ 2, // (reserved/simple op)
+    /*0x4D*/ 2, // (reserved/simple op)
+    /*0x4E*/ 2, // (reserved/simple op)
+    /*0x4F*/ 2, // (reserved/simple op)
+    // ... fill remaining unused opcodes with 2 cycles for now ...
     [0xFF] = 2 // HALT
 };
 
@@ -77,6 +105,21 @@ uint8_t CPU::read(uint16_t addr) const
 void CPU::write(uint16_t addr, uint8_t val)
 {
     mem[addr] = val;
+}
+
+// Reads the next byte from memory and increments PC
+uint8_t CPU::fetch8() {
+    uint8_t value = read(PC); // read is your existing memory read helper
+    PC++;
+    return value;
+}
+
+// Reads the next two bytes (little-endian) and increments PC by 2
+uint16_t CPU::read16() {
+    uint8_t low  = read(PC);
+    uint8_t high = read(PC + 1);
+    PC += 2;
+    return static_cast<uint16_t>(low) | (static_cast<uint16_t>(high) << 8);
 }
 
 void CPU::setNZ(uint8_t val)
@@ -627,6 +670,92 @@ void CPU::step()
     case 0x37:
     { // BRK
         PC = break_addr;
+        break;
+    }
+
+    case 0x38: // ROL A
+    {
+        uint8_t oldCarry = (P & C) ? 1 : 0;
+        uint8_t newCarry = (A & 0x80) ? 1 : 0;
+        A = (A << 1) | oldCarry;
+        setFlag(C, newCarry);
+        setFlag(Z, A == 0);
+        setFlag(N, A & 0x80);
+        break;
+    }
+
+    case 0x39: // ROR A
+    {
+        uint8_t oldCarry = (P & C) ? 1 : 0;
+        uint8_t newCarry = (A & 0x01) ? 1 : 0;
+        A = (A >> 1) | (oldCarry << 7);
+        setFlag(C, newCarry);
+        setFlag(Z, A == 0);
+        setFlag(N, A & 0x80);
+        break;
+    }
+
+    case 0x40: // ASL A
+    {
+        uint8_t newCarry = (A & 0x80) ? 1 : 0;
+        A <<= 1;
+        setFlag(C, newCarry);
+        setFlag(Z, A == 0);
+        setFlag(N, A & 0x80);
+        break;
+    }
+
+    case 0x41: // ASR A (Arithmetic Shift Right)
+    {
+        uint8_t newCarry = (A & 0x01) ? 1 : 0;
+        // Preserve sign bit for arithmetic shift
+        uint8_t sign = A & 0x80;
+        A = (A >> 1) | sign;
+        setFlag(C, newCarry);
+        setFlag(Z, A == 0);
+        setFlag(N, A & 0x80);
+        break;
+    }
+
+    case 0x42: // BVS abs
+    {
+        uint16_t addr = read16();
+        PC += 2;
+        if (P & V)
+        {
+            PC = addr;
+        }
+        break;
+    }
+
+    case 0x43: // BVC abs
+    {
+        uint16_t addr = read16();
+        PC += 2;
+        if (!(P & V))
+        {
+            PC = addr;
+        }
+        break;
+    }
+
+    case 0x44: // BVS rel
+    {
+        int8_t offset = (int8_t)fetch8();
+        if (P & V)
+        {
+            PC += offset;
+        }
+        break;
+    }
+
+    case 0x45: // BVC rel
+    {
+        int8_t offset = (int8_t)fetch8();
+        if (!(P & V))
+        {
+            PC += offset;
+        }
         break;
     }
 

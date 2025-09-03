@@ -64,6 +64,16 @@ OPCODES = {
 'SBC':0x35,
 'SETBRK':0x36,
 'BRK':0x37,
+'ROL': 0x38,  # Rotate Left (Accumulator)
+    'ROR': 0x39,  # Rotate Right (Accumulator)
+    'ASL': 0x40,  # Arithmetic Shift Left (Accumulator)
+    'ASR': 0x41,  # Arithmetic Shift Right (Accumulator)
+'BVS': 0x42,  # absolute
+    'BVC': 0x43,  # absolute
+    'BVSR': 0x44, # relative
+    'BVCR': 0x45, # relative
+
+
 }
 
 SIZES = {
@@ -109,6 +119,16 @@ SIZES = {
 0x35:2,
 0x36:3,
 0x37:1,
+0x38: 1,  # ROL A
+    0x39: 1,  # ROR A
+    0x40: 1,  # ASL A
+    0x41: 1,  # ASR A
+    0x42: 3,  # BVS abs (opcode + 2-byte address)
+    0x43: 3,  # BVC abs
+    0x44: 2,  # BVS rel (opcode + 1-byte offset)
+    0x45: 2,  # BVC rel
+
+
 }
 
 # ---------------- Utilities ----------------
