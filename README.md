@@ -61,13 +61,16 @@ This document lists all **53** currently implemented opcodes for the Virtual CPU
 | 0x37   | BRK        | 1            | 1                                                     | Jump to the address stored by SETBRK. Does not push return address; acts like a structured break in C/C++.          | No                 |
 | 0x38   | ROL A      | 1            | Rotate A left through carry. Sets N/Z/C.              | 2                                                                                                                   | No                 |
 | 0x39   | ROR A      | 1            | Rotate A right through carry. Sets N/Z/C.             | 2                                                                                                                   | No                 |
-| 0x40   | ASL A      | 1            | Arithmetic shift left A. Sets N/Z/C.                  | 2                                                                                                                   | No                 |
-| 0x41   | ASR A      | 1            | Arithmetic shift right A (preserve sign). Sets N/Z/C. | 2                                                                                                                   | No                 |
-| 0x42   | BVS abs    | 3            | Branch if overflow set to absolute address.           | 4                                                                                                                   | No                 |
-| 0x43   | BVC abs    | 3            | Branch if overflow clear to absolute address.         | 4                                                                                                                   | No                 |
-| 0x44   | BVS rel    | 2            | Branch if overflow set by signed offset.              | 3                                                                                                                   | No                 |
-| 0x45   | BVC rel    | 2            | Branch if overflow clear by signed offset.            | 3                                                                                                                   | No                 |
-| 0xFF   | HALT       | 1            | Halt execution.                                       | 2                                                                                                                   | No                 |
+| 0x3A | ASL A  | 1 | Arithmetic shift left A. Sets N/Z/C. | 2 | No |
+| 0x3B | ASR A  | 1 | Arithmetic shift right A (preserve sign). Sets N/Z/C. | 2 | No |
+| 0x3C | BVS abs | 3 | Branch if overflow set to absolute address. | 4 | No |
+| 0x3D | BVC abs | 3 | Branch if overflow clear to absolute address. | 4 | No |
+| 0x3E | BVS rel | 2 | Branch if overflow set by signed offset. | 3 | No |
+| 0x3F | BVC rel | 2 | Branch if overflow clear by signed offset. | 3 | No |
+| 0x40 | JSRI ptr | 3 | Jump to subroutine at address read from given pointer address. Pushes return address. | 7 | No |
+| 0x41 | BX | 1 | Branch relative by signed offset in X register. | 2 | No |
+| 0x42 | BAX | 1 | Jump absolute to address formed from X:high, A:low. | 2 | No |
+| 0xFF   | HALT       | 1            | Halt execution.                                      2                                                                                                                   | No                 |
 
 ---
 

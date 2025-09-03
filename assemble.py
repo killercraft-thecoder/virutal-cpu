@@ -66,12 +66,18 @@ OPCODES = {
 'BRK':0x37,
 'ROL': 0x38,  # Rotate Left (Accumulator)
     'ROR': 0x39,  # Rotate Right (Accumulator)
-    'ASL': 0x40,  # Arithmetic Shift Left (Accumulator)
-    'ASR': 0x41,  # Arithmetic Shift Right (Accumulator)
-'BVS': 0x42,  # absolute
-    'BVC': 0x43,  # absolute
-    'BVSR': 0x44, # relative
-    'BVCR': 0x45, # relative
+    'ASL': 0x3A,  # Arithmetic Shift Left (Accumulator)
+    'ASR': 0x3B,  # Arithmetic Shift Right (Accumulator)
+'BVS': 0x3C,  # absolute
+    'BVC': 0x3D,  # absolute
+    'BVSR': 0x3E, # relative
+    'BVCR': 0x3F, # relative
+    'JSRI': 0x40,  # Jump to SubRoutine Indirect
+    'BX': 0x41,
+    'BAX':0x42,
+
+
+
 
 
 }
@@ -121,12 +127,15 @@ SIZES = {
 0x37:1,
 0x38: 1,  # ROL A
     0x39: 1,  # ROR A
-    0x40: 1,  # ASL A
-    0x41: 1,  # ASR A
-    0x42: 3,  # BVS abs (opcode + 2-byte address)
-    0x43: 3,  # BVC abs
-    0x44: 2,  # BVS rel (opcode + 1-byte offset)
-    0x45: 2,  # BVC rel
+    0x3A: 1,  # ASL A
+    0x3B: 1,  # ASR A
+    0x3C: 3,  # BVS abs (opcode + 2-byte address)
+    0x3D: 3,  # BVC abs
+    0x3E: 2,  # BVS rel (opcode + 1-byte offset)
+    0x3F: 2,  # BVC rel
+0x40: 3,  # opcode + 16-bit pointer address
+0x41: 1,  # opcode only
+0x42:1, # opcode only
 
 
 }

@@ -57,18 +57,18 @@ static const uint8_t CYCLES[256] = {
     /*0x33*/ 2, // SWAP
     /*0x34*/ 2, // (reserved/simple op)
     /*0x35*/ 2, // (reserved/simple op)
-    /*0x36*/ 2, // (reserved/simple op)
+    /*0x36*/ 3, // (reserved/simple op)
     /*0x37*/ 2, // (reserved/simple op)
     /*0x38*/ 2, // ROL A
     /*0x39*/ 2, // ROR A
-    /*0x3A*/ 2, // (reserved/simple op)
-    /*0x3B*/ 2, // (reserved/simple op)
-    /*0x3C*/ 2, // (reserved/simple op)
-    /*0x3D*/ 2, // (reserved/simple op)
-    /*0x3E*/ 2, // (reserved/simple op)
-    /*0x3F*/ 2, // (reserved/simple op)
-    /*0x40*/ 2, // ASL A
-    /*0x41*/ 2, // ASR A
+    /*0x3A*/ 2, // ASL A
+    /*0x3B*/ 2, // ASR A
+    /*0x3C*/ 4, // BVS abs
+    /*0x3D*/ 4, // BVC abs
+    /*0x3E*/ 3, // BVS rel
+    /*0x3F*/ 3, // BVC rel
+    /*0x40*/ 7, // (reserved/simple op)
+    /*0x41*/ 2, // (reserved/simple op)
     /*0x42*/ 2, // (reserved/simple op)
     /*0x43*/ 2, // (reserved/simple op)
     /*0x44*/ 2, // (reserved/simple op)
@@ -79,8 +79,6 @@ static const uint8_t CYCLES[256] = {
     /*0x49*/ 2, // (reserved/simple op)
     /*0x4A*/ 2, // (reserved/simple op)
     /*0x4B*/ 2, // (reserved/simple op)
-    /*0x4C*/ 2, // (reserved/simple op)
-    /*0x4D*/ 2, // (reserved/simple op)
     /*0x4E*/ 2, // (reserved/simple op)
     /*0x4F*/ 2, // (reserved/simple op)
     // ... fill remaining unused opcodes with 2 cycles for now ...
@@ -108,15 +106,17 @@ void CPU::write(uint16_t addr, uint8_t val)
 }
 
 // Reads the next byte from memory and increments PC
-uint8_t CPU::fetch8() {
+uint8_t CPU::fetch8()
+{
     uint8_t value = read(PC); // read is your existing memory read helper
     PC++;
     return value;
 }
 
 // Reads the next two bytes (little-endian) and increments PC by 2
-uint16_t CPU::read16() {
-    uint8_t low  = read(PC);
+uint16_t CPU::read16()
+{
+    uint8_t low = read(PC);
     uint8_t high = read(PC + 1);
     PC += 2;
     return static_cast<uint16_t>(low) | (static_cast<uint16_t>(high) << 8);
@@ -176,11 +176,25 @@ void CPU::run()
 
 void CPU::step()
 {
+
     if (cycles > 0)
     {
         cycles--;
         return;
     } // still penalty
+    if (timerActive)
+    {
+        if (timerCounter > 0)
+        {
+            timerCounter--;
+            if (timerCounter == 0)
+            {
+                PC = timerHandlerAddr;
+                timerActive = false;
+            }
+        }
+    }
+
     if (_halted)
         return;
     uint8_t op = read(PC++);
@@ -695,7 +709,7 @@ void CPU::step()
         break;
     }
 
-    case 0x40: // ASL A
+    case 0x3A: // ASL A
     {
         uint8_t newCarry = (A & 0x80) ? 1 : 0;
         A <<= 1;
@@ -705,7 +719,7 @@ void CPU::step()
         break;
     }
 
-    case 0x41: // ASR A (Arithmetic Shift Right)
+    case 0x3B: // ASR A (Arithmetic Shift Right)
     {
         uint8_t newCarry = (A & 0x01) ? 1 : 0;
         // Preserve sign bit for arithmetic shift
@@ -717,10 +731,9 @@ void CPU::step()
         break;
     }
 
-    case 0x42: // BVS abs
+    case 0x3C: // BVS abs
     {
         uint16_t addr = read16();
-        PC += 2;
         if (P & V)
         {
             PC = addr;
@@ -728,10 +741,9 @@ void CPU::step()
         break;
     }
 
-    case 0x43: // BVC abs
+    case 0x3D: // BVC abs
     {
         uint16_t addr = read16();
-        PC += 2;
         if (!(P & V))
         {
             PC = addr;
@@ -739,7 +751,7 @@ void CPU::step()
         break;
     }
 
-    case 0x44: // BVS rel
+    case 0x3E: // BVS rel
     {
         int8_t offset = (int8_t)fetch8();
         if (P & V)
@@ -749,7 +761,7 @@ void CPU::step()
         break;
     }
 
-    case 0x45: // BVC rel
+    case 0x3F: // BVC rel
     {
         int8_t offset = (int8_t)fetch8();
         if (!(P & V))
@@ -758,7 +770,36 @@ void CPU::step()
         }
         break;
     }
+    case 0x40: // JSRI (Jump to SubRoutine Indirect)
+    {
+        // Step 1: Fetch pointer address from instruction stream
+        uint16_t ptrAddr = read16(); // increments PC by 2
 
+        // Step 2: Read actual target address from memory at ptrAddr
+        uint16_t targetAddr = read(ptrAddr) | (read(ptrAddr + 1) << 8);
+
+        // Step 3: Push return address (PC - 1, like JSR)
+        uint16_t returnAddr = PC;        // PC already points after operand
+        push8((returnAddr >> 8) & 0xFF); // high byte
+        push8(returnAddr & 0xFF);        // low byte
+
+        // Step 4: Jump to target
+        PC = targetAddr;
+        break;
+    }
+    case 0x41: // BX - Branch relative using X
+    {
+        int8_t offset = static_cast<int8_t>(X);
+        PC += offset;
+        break;
+    }
+    case 0x42: // BAX - Jump absolute using A (low) and X (high)
+    {
+        uint16_t target = (static_cast<uint16_t>(X) << 8) | A;
+        PC = target;
+        break;
+    }
+    
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag

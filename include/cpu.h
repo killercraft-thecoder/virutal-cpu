@@ -10,7 +10,7 @@ struct CPU
     uint8_t X = 0;
     uint8_t SP = 0xFF;
     uint16_t PC = 0;
-    uint8_t P = 0;        // bit0=C, bit1=Z, bit6=V, bit7=N
+    uint8_t P = 0; // bit0=C, bit1=Z, bit6=V, bit7=N
     uint32_t cycles = 0;
     bool _halted = false; // for faster emualtion only
 
@@ -42,9 +42,10 @@ struct CPU
     void setAddFlags(uint8_t a, uint8_t b, uint16_t res);
     void setSubFlags(uint8_t a, uint8_t b, uint16_t res);
     void push8(uint8_t value);
-    void setFlag(int flag,bool cond);
+    void setFlag(int flag, bool cond);
     uint8_t pop8();
     uint16_t break_addr;
     uint8_t fetch8();
     uint16_t read16();
+
 };
