@@ -792,7 +792,7 @@ void CPU::step()
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag
-        printf("[HALT] Invalid opcode 0x%02X at address 0x%04X\n", opcode, address);
+        printf("[HALT] Invalid opcode 0x%02X at address 0x%04X\n", op, PC);
         break;
     default:
         // NOP for unknown opcodes
