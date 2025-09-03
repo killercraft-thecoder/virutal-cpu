@@ -650,6 +650,6 @@ inline void CPU::setFlag(int flag, bool cond)
     }
     else
     {
-        P &= flag;
+        P &= ~flag;
     }
 }
