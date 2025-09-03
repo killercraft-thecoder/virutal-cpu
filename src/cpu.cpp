@@ -1,4 +1,5 @@
 #include "cpu.h"
+#include <stdio>
 
 // Cycle counts for each opcode (0x00–0xFF)
 // Unused opcodes default to 0 cycles for now.
@@ -182,18 +183,6 @@ void CPU::step()
         cycles--;
         return;
     } // still penalty
-    if (timerActive)
-    {
-        if (timerCounter > 0)
-        {
-            timerCounter--;
-            if (timerCounter == 0)
-            {
-                PC = timerHandlerAddr;
-                timerActive = false;
-            }
-        }
-    }
 
     if (_halted)
         return;
@@ -803,6 +792,7 @@ void CPU::step()
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag
+        printf("[HALT] Invalid opcode 0x%02X at address 0x%04X\n", opcode, address);
         break;
     default:
         // NOP for unknown opcodes
