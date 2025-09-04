@@ -17,7 +17,7 @@ Rom load_rom(const char* path) {
     uint16_t origin = buf[6] << 8 | buf[5];
     uint16_t size   = buf[8] << 8 | buf[7];
     uint16_t csum   = buf[10] << 8 | buf[9];
-    if (buf.size() != 12u + size) std::printf("Warning:ROM size mismatch\n");
+    if (buf.size() != size) std::printf("Warning:ROM size mismatch\n");
     uint16_t calc = 0;
     for (size_t i = 12; i < buf.size(); ++i) calc = (calc + buf[i]) & 0xFFFF;
     if (calc != csum) std::printf("Warning:ROM checksum mismatch\n");
@@ -25,6 +25,12 @@ Rom load_rom(const char* path) {
     rom.origin = origin;
     rom.data.assign(buf.begin() + 12, buf.end());
     return rom;
+}
+
+void clear_rom(Rom* rom) {
+    rom->data.clear();
+    rom->data.resize(1);
+    rom->origin = 0;
 }
 
 // Example integration:

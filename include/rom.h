@@ -8,4 +8,4 @@ struct Rom {
 };
 
 Rom load_rom(const char* path);
-    
+void clear_rom(Rom* rom);

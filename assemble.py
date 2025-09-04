@@ -3,6 +3,7 @@ import argparse
 import os
 import re
 import sys
+import time
 
 # ---------------- Instruction set ----------------
 
@@ -485,6 +486,7 @@ def main():
     origin = parse_number(args.origin)
     fill = parse_number(args.fill)
 
+    starttime = time.monotonic()
     asm = Assembler(origin=origin, fill=fill, include_paths=args.includes, cli_defines=cli_defines)
 
     if args.input == "-":
@@ -511,8 +513,9 @@ def main():
             out_path = base + ".rom"
         with open(out_path, "wb") as fh:
             fh.write(blob)
+        endtime = time.monotonic()
         # Print a short note to stderr
-        sys.stderr.write(f"Wrote ROM: {out_path}\n")
+        sys.stderr.write(f"Wrote ROM: {out_path} Built ROM in {(endtime-starttime) * 1000} milliseconds.\n")
 
 if __name__ == "__main__":
     main()
