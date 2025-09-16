@@ -1,5 +1,5 @@
 #include "cpu.h"
-#include <stdio>
+#include <stdio.h>
 
 // Cycle counts for each opcode (0x00–0xFF)
 // Unused opcodes default to 0 cycles for now.

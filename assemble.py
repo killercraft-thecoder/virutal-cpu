@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import time
+from typing import Any,Literal
 
 # ---------------- Instruction set ----------------
 
@@ -176,7 +177,7 @@ def checksum16(bs: bytes) -> int:
 # ---------------- Assembler ----------------
 
 class Assembler:
-    def __init__(self, origin=0x0000, fill=0x00, include_paths=None, cli_defines=None):
+    def __init__(self, origin=0x0000, fill=0x00, include_paths=None, cli_defines=None) -> None:
         self.origin = origin & 0xFFFF
         self.fill = fill & 0xFF
         self.include_paths = include_paths or []
@@ -188,7 +189,7 @@ class Assembler:
 
     # ---------- Preprocessing and loading ----------
 
-    def resolve_include(self, path, current_file):
+    def resolve_include(self, path, current_file) -> Any | None:
         # Absolute
         if os.path.isabs(path) and os.path.exists(path):
             return path
@@ -205,7 +206,7 @@ class Assembler:
                 return cand
         return None
 
-    def load_file(self, filename, _seen=None):
+    def load_file(self, filename, _seen=None) -> None:
         filename = os.path.abspath(filename)
         if _seen is None:
             _seen = set()
@@ -261,7 +262,7 @@ class Assembler:
 
     # ---------- Pass 1: label addresses ----------
 
-    def pass1(self):
+    def pass1(self) -> None:
         pc = self.origin
         for file, ln, line in self.lines:
             cur = line.strip()
@@ -321,7 +322,7 @@ class Assembler:
             return self.labels[val]
         return parse_number(val)
 
-    def pass2(self):
+    def pass2(self) -> None:
         pc = self.origin
         out = []
         seg_base = None
@@ -331,8 +332,8 @@ class Assembler:
             if seg_base is None:
                 seg_base = pc
 
-        def emit(b):
-            out.append(b & 0xFF)
+        def emit(b:int) -> None:
+            if (b): out.append(b & 0xFF)
 
         for file, ln, line in self.lines:
             cur = line.strip()
@@ -421,7 +422,7 @@ class Assembler:
 
     # ---------- Image and outputs ----------
 
-    def build_image(self):
+    def build_image(self) -> tuple[int, Literal[b""]] | tuple[Any, bytes]:
         if not self.segments:
             return self.origin, b""
         base = min(addr for addr, _ in self.segments)
@@ -447,7 +448,7 @@ class Assembler:
         lines.append("};")
         return "\n".join(lines)
 
-    def to_rom_bytes(self, origin_override=None):
+    def to_rom_bytes(self, origin_override=None) -> bytes:
         base, img = self.build_image()
         origin = base if origin_override is None else (origin_override & 0xFFFF)
         size = len(img) & 0xFFFF
@@ -463,7 +464,7 @@ class Assembler:
 
 # ---------------- CLI ----------------
 
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser(description="Assembler for the minimal 8-bit CPU")
     ap.add_argument("input", help="Assembly file (entry), use '-' for stdin")
     ap.add_argument("--origin", "-o", default="0x0000", help="Default origin if no .org")
