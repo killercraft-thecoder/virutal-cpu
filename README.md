@@ -67,7 +67,7 @@ This document lists all **68** currently implemented opcodes for the Virtual CPU
 | 0x3D | BVC abs | 3 | Branch if overflow clear to absolute address. | 4 | No |
 | 0x3E | BVS rel | 2 | Branch if overflow set by signed offset. | 3 | No |
 | 0x3F | BVC rel | 2 | Branch if overflow clear by signed offset. | 3 | No |
-| 0x40 | JSRI ptr | 3 | Jump to subroutine at address read from given pointer address. Pushes return address. | 7 | No |
+| 0x40 | JSRI ptr | 3 | Jump to subroutine at address read from given pointer address. Pushes return address. | 6 | No |
 | 0x41 | BX | 1 | Branch relative by signed offset in X register. | 2 | No |
 | 0x42 | BAX | 1 | Jump absolute to address formed from X:high, A:low. | 2 | No |
 | 0xFF   | HALT       | 1            | Halt execution.                                      2                                                                                                                   | No                 |

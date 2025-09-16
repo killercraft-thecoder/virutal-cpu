@@ -68,9 +68,9 @@ static const uint8_t CYCLES[256] = {
     /*0x3D*/ 4, // BVC abs
     /*0x3E*/ 3, // BVS rel
     /*0x3F*/ 3, // BVC rel
-    /*0x40*/ 7, // (reserved/simple op)
-    /*0x41*/ 2, // (reserved/simple op)
-    /*0x42*/ 2, // (reserved/simple op)
+    /*0x40*/ 6, // JSRI
+    /*0x41*/ 2, // BX
+    /*0x42*/ 3, // BAX
     /*0x43*/ 2, // (reserved/simple op)
     /*0x44*/ 2, // (reserved/simple op)
     /*0x45*/ 2, // (reserved/simple op)
@@ -789,6 +789,15 @@ void CPU::step()
         break;
     }
     
+    case 0x43: // Worko n this later.
+    {
+        this->P = 0;
+        this->A = 0;
+        this->X = 0;
+        this->break_addr = 0;
+        break;
+    }
+
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag
