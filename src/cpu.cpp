@@ -864,7 +864,7 @@ void CPU::step()
 
         if (low > 9)
         {
-            low -= 10;
+            low = 0; // needed so that less subraction done.
             high += 1;
         }
 
@@ -888,14 +888,14 @@ void CPU::step()
     case 0x47: // SUBBCD
     {
         uint8_t a = this->A;
-        uint8_t b = this->X; // Assume second operand is in X
+        uint8_t b = this->X;
         int8_t low = (a & 0x0F) - (b & 0x0F);
         int8_t high = (a >> 4) - (b >> 4);
         bool borrow = false;
 
         if (low < 0)
         {
-            low += 10;
+            low = 0;
             high -= 1;
         }
 
