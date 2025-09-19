@@ -81,7 +81,9 @@ OPCODES = {
     'DECBIN':0x45,
     'ADDBCD':0x46,
     'SUBBCD':0x47,
-
+    'LDAD':0x48,
+    'LDSUB':0x49
+    'LD2':0x4A
 
 
 
@@ -145,7 +147,10 @@ SIZES = {
 0x44:1,
 0x45:1,
 0x46:1,
-0x47:1
+0x47:1,
+0x48:3, # opcode + 16-bit pointer address
+0x49:3,
+0x4A:3,
 
 }
 

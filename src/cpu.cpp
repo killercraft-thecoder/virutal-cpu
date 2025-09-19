@@ -76,10 +76,10 @@ static const uint8_t CYCLES[256] = {
     /*0x45*/ 14, // DECBIN
     /*0x46*/ 16, // ADDBCD
     /*0x47*/ 19, // SUBBCD
-    /*0x48*/ 2,  // (reserved/simple op)
-    /*0x49*/ 2,  // (reserved/simple op)
-    /*0x4A*/ 2,  // (reserved/simple op)
-    /*0x4B*/ 2,  // (reserved/simple op)
+    /*0x48*/ 6,  // LDAD
+    /*0x49*/ 6,  // LDSUB
+    /*0x4A*/ 4,  // LD2
+    /*0x4B*/ 4,  // ST2
     /*0x4E*/ 2,  // (reserved/simple op)
     /*0x4F*/ 2,  // (reserved/simple op)
     // ... fill remaining unused opcodes with 2 cycles for now ...
@@ -912,6 +912,75 @@ void CPU::step()
         setFlag(C, !borrow); // Carry clear means borrow occurred
         setFlag(N, (this->A & 0x80) != 0);
         setFlag(V, borrow); // Treat borrow as overflow
+
+        break;
+    }
+
+    case 0x48: // LDAD
+    {
+        uint16_t addr = read16();      // 2-byte immediate address
+        uint8_t val1 = read(addr);     // Byte 1
+        uint8_t val2 = read(addr + 1); // Byte 2
+
+        this->A = val1;
+        this->X = val2;
+
+        uint16_t sum = val1 + val2;
+        this->A = sum & 0xFF;
+
+        setFlag(Z, this->A == 0);
+        setFlag(C, sum > 0xFF);
+        setFlag(N, this->A & 0x80);
+        setFlag(V, (~(val1 ^ val2) & (val1 ^ this->A)) & 0x80);
+
+        break;
+    }
+
+    case 0x49: // LDSUB
+    {
+        uint16_t addr = read16();      // 2-byte immediate address
+        uint8_t val1 = read(addr);     // Byte 1 → A
+        uint8_t val2 = read(addr + 1); // Byte 2 → X
+
+        this->A = val1;
+        this->X = val2;
+
+        uint16_t result = static_cast<uint16_t>(val1) - static_cast<uint16_t>(val2);
+        this->A = result & 0xFF;
+
+        setFlag(Z, this->A == 0);
+        setFlag(C, val1 >= val2); // Carry set if no borrow
+        setFlag(N, this->A & 0x80);
+        setFlag(V, ((val1 ^ val2) & (val1 ^ this->A)) & 0x80);
+
+        break;
+    }
+
+    case 0x4A: // LD2
+    {
+        uint16_t addr = read16();      // 2-byte immediate address
+        uint8_t val1 = read(addr);     // Byte 1 → A
+        uint8_t val2 = read(addr + 1); // Byte 2 → X
+
+        this->A = val1;
+        this->X = val2;
+
+        setFlag(Z, (val1 | val2) == 0); // Z if both are zero
+        setFlag(N, val1 & 0x80);        // N from A
+        setFlag(V, val2 & 0x80);        // V from X (optional use)
+
+        break;
+    }
+
+    case 0x4B: // ST2
+    {
+        uint16_t addr = read16(); // 2-byte immediate address
+
+        write(addr, this->A);     // Store A
+        write(addr + 1, this->X); // Store X
+
+        setFlag(Z, (this->A | this->X) == 0); // Z if both are zero
+        setFlag(N, this->A & 0x80);           // N from A
 
         break;
     }
