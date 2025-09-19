@@ -1,6 +1,6 @@
 # Virtual CPU – Instruction Set Reference
 
-This document lists all **77** currently implemented opcodes for the Virtual CPU, along with their hex codes, instruction sizes, and descriptions for quick reference.
+This document lists all **78** currently implemented opcodes for the Virtual CPU, along with their hex codes, instruction sizes, and descriptions for quick reference.
 
 | Hex    | Mnemonic   | Size (bytes) | Description                                                                           | Base Cycles                                                                                                         | +1 if branch taken |
 | ------ | ---------- | ------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------ |
@@ -79,7 +79,7 @@ This document lists all **77** currently implemented opcodes for the Virtual CPU
 | 0x49   | LDSUB    | 3            | Load two bytes from immediate address, subtract second from first, store result in A | 6           | No                  |
 | 0x4A   | LD2      | 3            | Load two bytes from immediate address into A and X, set flags | 4           | No                  |
 | 0x4B   | ST2      | 3            | Store A and X into consecutive memory at immediate address | 4           | No                  |
-
+| 0x4C   | TST        | 1            | Compare A and X, set flags Z, C, N, V. Does not modify registers.                     | 2 | No |
 
 ---
 

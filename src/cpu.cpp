@@ -976,6 +976,18 @@ void CPU::step()
         break;
     }
 
+    case 0x4C: // TST
+    {
+        uint8_t result = this->A - this->X;
+
+        setFlag(Z, result == 0);                                       // Zero if equal
+        setFlag(C, this->A >= this->X);                                // Carry if A ≥ X
+        setFlag(N, result & 0x80);                                     // Negative if result is negative
+        setFlag(V, ((this->A ^ this->X) & (this->A ^ result)) & 0x80); // Overflow detection
+
+        break;
+    }
+
     case 0xFF:
         _halted = true;
         P |= H; // set Halt flag

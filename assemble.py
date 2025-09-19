@@ -82,8 +82,10 @@ OPCODES = {
     'ADDBCD':0x46,
     'SUBBCD':0x47,
     'LDAD':0x48,
-    'LDSUB':0x49
-    'LD2':0x4A
+    'LDSUB':0x49,
+    'LD2':0x4A,
+    'ST2':0x4B,
+    'TST':0x4C,
 
 
 
@@ -151,7 +153,8 @@ SIZES = {
 0x48:3, # opcode + 16-bit pointer address
 0x49:3,
 0x4A:3,
-
+0x4B:3,
+0x4C:1,
 }
 
 # ---------------- Utilities ----------------
