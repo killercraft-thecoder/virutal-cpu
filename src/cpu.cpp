@@ -73,7 +73,7 @@ static const uint8_t CYCLES[256] = {
     /*0x42*/ 3,  // BAX
     /*0x43*/ 2,  // (reserved/simple op)
     /*0x44*/ 18, // DECOD
-    /*0x45*/ 14, // DECBIN
+    /*0x45*/ 13, // DECBIN
     /*0x46*/ 16, // ADDBCD
     /*0x47*/ 19, // SUBBCD
     /*0x48*/ 6,  // LDAD
