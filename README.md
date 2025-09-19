@@ -71,6 +71,10 @@ This document lists all **68** currently implemented opcodes for the Virtual CPU
 | 0x41 | BX | 1 | Branch relative by signed offset in X register. | 2 | No |
 | 0x42 | BAX | 1 | Jump absolute to address formed from X:high, A:low. | 2 | No |
 | 0xFF   | HALT       | 1            | Halt execution.                                      2                                                                                                                   | No                 |
+| 0x44   | DECOD    | Convert binary in A to packed BCD       | 18   | Z, C, N, V       | No |
+| 0x45   | DECBIN   | Convert packed BCD in A to binary       | 14   | Z, C, N, V       | NO |
+| 0x46   | ADDBCD   | Add packed BCD in A and X, result in A  | 16   | Z, C, N, V       | No |
+| 0x47   | SUBBCD   | Subtract packed BCD in X from A         | 19   | Z, C, N, V       |  No |
 
 ---
 

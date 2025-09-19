@@ -4,84 +4,84 @@
 // Cycle counts for each opcode (0x00–0xFF)
 // Unused opcodes default to 0 cycles for now.
 static const uint8_t CYCLES[256] = {
-    /*0x00*/ 2, // NOP
-    /*0x01*/ 4, // LDA abs
-    /*0x02*/ 5, // STA abs
-    /*0x03*/ 2, // ADD (A = A + X)
-    /*0x04*/ 2, // SUB (A = A - X)
-    /*0x05*/ 2, // INC A
-    /*0x06*/ 2, // DEC A
-    /*0x07*/ 2, // XTA
-    /*0x08*/ 2, // ATX
-    /*0x09*/ 4, // LDX abs
-    /*0x0A*/ 5, // STX abs
-    /*0x0B*/ 3, // BR rel
-    /*0x0C*/ 4, // BNZ abs
-    /*0x0D*/ 4, // BZ abs
-    /*0x0E*/ 4, // BN abs
-    /*0x0F*/ 4, // BP abs
-    /*0x10*/ 6, // JSR abs
-    /*0x11*/ 4, // RTS
-    /*0x12*/ 5, // BSR rel
-    /*0x13*/ 4, // BC abs
-    /*0x14*/ 3, // BCR rel
-    /*0x15*/ 3, // BNR rel
-    /*0x16*/ 3, // BPR rel
-    /*0x17*/ 4, // BP abs
-    /*0x18*/ 4, // BN abs
-    /*0x19*/ 3, // XSRA
-    /*0x1A*/ 3, // XSLA
-    /*0x1B*/ 3, // ASRX
-    /*0x1C*/ 3, // ASLX
-    /*0x1D*/ 2, // AND
-    /*0x1E*/ 2, // OR
-    /*0x1F*/ 2, // XOR/EOR
-    /*0x20*/ 2, // CLF
-    /*0x21*/ 2, // CLC
-    /*0x22*/ 2, // CLN
-    /*0x23*/ 2, // CLZ
-    /*0x24*/ 2, // XXA
-    /*0x25*/ 5, // BRR rel
-    /*0x26*/ 4, // RTR
-    /*0x27*/ 3, // BA
-    /*0x28*/ 2, // ADDF
-    /*0x29*/ 2, // SUBF
-    /*0x2A*/ 4, // BNC abs
-    /*0x2B*/ 3, // BNCR rel
-    /*0x2C*/ 3, // PHA
-    /*0x2D*/ 3, // PLA
-    /*0x2E*/ 3, // PHX
-    /*0x2F*/ 3, // PLX
-    /*0x30*/ 2, // NOTA
-    /*0x31*/ 2, // NOTX
-    /*0x32*/ 2, // NEG
-    /*0x33*/ 2, // SWAP
-    /*0x34*/ 2, // (reserved/simple op)
-    /*0x35*/ 2, // (reserved/simple op)
-    /*0x36*/ 3, // (reserved/simple op)
-    /*0x37*/ 2, // (reserved/simple op)
-    /*0x38*/ 2, // ROL A
-    /*0x39*/ 2, // ROR A
-    /*0x3A*/ 2, // ASL A
-    /*0x3B*/ 2, // ASR A
-    /*0x3C*/ 4, // BVS abs
-    /*0x3D*/ 4, // BVC abs
-    /*0x3E*/ 3, // BVS rel
-    /*0x3F*/ 3, // BVC rel
-    /*0x40*/ 6, // JSRI
-    /*0x41*/ 2, // BX
-    /*0x42*/ 3, // BAX
-    /*0x43*/ 2, // (reserved/simple op)
-    /*0x44*/ 2, // (reserved/simple op)
-    /*0x45*/ 2, // (reserved/simple op)
-    /*0x46*/ 2, // (reserved/simple op)
-    /*0x47*/ 2, // (reserved/simple op)
-    /*0x48*/ 2, // (reserved/simple op)
-    /*0x49*/ 2, // (reserved/simple op)
-    /*0x4A*/ 2, // (reserved/simple op)
-    /*0x4B*/ 2, // (reserved/simple op)
-    /*0x4E*/ 2, // (reserved/simple op)
-    /*0x4F*/ 2, // (reserved/simple op)
+    /*0x00*/ 2,  // NOP
+    /*0x01*/ 4,  // LDA abs
+    /*0x02*/ 5,  // STA abs
+    /*0x03*/ 2,  // ADD (A = A + X)
+    /*0x04*/ 2,  // SUB (A = A - X)
+    /*0x05*/ 2,  // INC A
+    /*0x06*/ 2,  // DEC A
+    /*0x07*/ 2,  // XTA
+    /*0x08*/ 2,  // ATX
+    /*0x09*/ 4,  // LDX abs
+    /*0x0A*/ 5,  // STX abs
+    /*0x0B*/ 3,  // BR rel
+    /*0x0C*/ 4,  // BNZ abs
+    /*0x0D*/ 4,  // BZ abs
+    /*0x0E*/ 4,  // BN abs
+    /*0x0F*/ 4,  // BP abs
+    /*0x10*/ 6,  // JSR abs
+    /*0x11*/ 4,  // RTS
+    /*0x12*/ 5,  // BSR rel
+    /*0x13*/ 4,  // BC abs
+    /*0x14*/ 3,  // BCR rel
+    /*0x15*/ 3,  // BNR rel
+    /*0x16*/ 3,  // BPR rel
+    /*0x17*/ 4,  // BP abs
+    /*0x18*/ 4,  // BN abs
+    /*0x19*/ 3,  // XSRA
+    /*0x1A*/ 3,  // XSLA
+    /*0x1B*/ 3,  // ASRX
+    /*0x1C*/ 3,  // ASLX
+    /*0x1D*/ 2,  // AND
+    /*0x1E*/ 2,  // OR
+    /*0x1F*/ 2,  // XOR/EOR
+    /*0x20*/ 2,  // CLF
+    /*0x21*/ 2,  // CLC
+    /*0x22*/ 2,  // CLN
+    /*0x23*/ 2,  // CLZ
+    /*0x24*/ 2,  // XXA
+    /*0x25*/ 5,  // BRR rel
+    /*0x26*/ 4,  // RTR
+    /*0x27*/ 3,  // BA
+    /*0x28*/ 2,  // ADDF
+    /*0x29*/ 2,  // SUBF
+    /*0x2A*/ 4,  // BNC abs
+    /*0x2B*/ 3,  // BNCR rel
+    /*0x2C*/ 3,  // PHA
+    /*0x2D*/ 3,  // PLA
+    /*0x2E*/ 3,  // PHX
+    /*0x2F*/ 3,  // PLX
+    /*0x30*/ 2,  // NOTA
+    /*0x31*/ 2,  // NOTX
+    /*0x32*/ 2,  // NEG
+    /*0x33*/ 2,  // SWAP
+    /*0x34*/ 2,  // (reserved/simple op)
+    /*0x35*/ 2,  // (reserved/simple op)
+    /*0x36*/ 3,  // (reserved/simple op)
+    /*0x37*/ 2,  // (reserved/simple op)
+    /*0x38*/ 2,  // ROL A
+    /*0x39*/ 2,  // ROR A
+    /*0x3A*/ 2,  // ASL A
+    /*0x3B*/ 2,  // ASR A
+    /*0x3C*/ 4,  // BVS abs
+    /*0x3D*/ 4,  // BVC abs
+    /*0x3E*/ 3,  // BVS rel
+    /*0x3F*/ 3,  // BVC rel
+    /*0x40*/ 6,  // JSRI
+    /*0x41*/ 2,  // BX
+    /*0x42*/ 3,  // BAX
+    /*0x43*/ 2,  // (reserved/simple op)
+    /*0x44*/ 18, // DECOD
+    /*0x45*/ 14, // DECBIN
+    /*0x46*/ 16, // ADDBCD
+    /*0x47*/ 19, // SUBBCD
+    /*0x48*/ 2,  // (reserved/simple op)
+    /*0x49*/ 2,  // (reserved/simple op)
+    /*0x4A*/ 2,  // (reserved/simple op)
+    /*0x4B*/ 2,  // (reserved/simple op)
+    /*0x4E*/ 2,  // (reserved/simple op)
+    /*0x4F*/ 2,  // (reserved/simple op)
     // ... fill remaining unused opcodes with 2 cycles for now ...
     [0xFF] = 2 // HALT
 };
@@ -109,7 +109,7 @@ void CPU::write(uint16_t addr, uint8_t val)
 // Reads the next byte from memory and increments PC
 uint8_t CPU::fetch8()
 {
-    uint8_t value = read(PC); // read is your existing memory read helper
+    uint8_t value = read(PC);
     PC++;
     return value;
 }
@@ -186,7 +186,9 @@ void CPU::step()
 
     if (_halted)
         return;
+
     uint8_t op = read(PC++);
+
     switch (op)
     {
     case 0x00: // ADD: A = A + X
@@ -788,13 +790,129 @@ void CPU::step()
         PC = target;
         break;
     }
-    
+
     case 0x43: // Worko n this later.
     {
         this->P = 0;
         this->A = 0;
         this->X = 0;
         this->break_addr = 0;
+        break;
+    }
+
+    case 0x44: // DECOD (Bin -> BCD)
+    {
+        uint8_t value = this->A;
+        uint8_t bcd = 0;
+        bool overflow = false;
+
+        if (value > 99)
+        {
+            overflow = true; // can't represent >99 in 2-digit BCD
+            value = 99;      // clamp to max BCD
+        }
+
+        // Fast conversion without modulo
+        uint8_t tens = 0;
+        while (value >= 10)
+        {
+            value -= 10;
+            ++tens;
+        }
+
+        bcd = (tens << 4) | value;
+        this->A = bcd;
+
+        // Flag updates
+        setFlag(Z, (bcd == 0)); // Zero flag
+        setFlag(C, overflow);   // Carry flag signals overflow from binary to BCD
+
+        break;
+    }
+
+    case 0x45: // DECBIN (BCD -> Bin)
+    {
+        uint8_t bcd = this->A;
+        uint8_t tens = (bcd >> 4) & 0x0F;
+        uint8_t ones = bcd & 0x0F;
+        bool overflow = false;
+
+        if (tens > 9 || ones > 9)
+        {
+            overflow = true; // invalid BCD digits
+            tens = (tens > 9) ? 9 : tens;
+            ones = (ones > 9) ? 9 : ones;
+        }
+
+        uint8_t binary = tens * 10 + ones;
+        this->A = binary;
+
+        // Flag updates
+        setFlag(Z, (binary == 0)); // Zero flag
+        setFlag(C, overflow);      // Carry flag signals invalid BCD input
+
+        break;
+    }
+
+    case 0x46: // ADDBCD
+    {
+        uint8_t a = this->A;
+        uint8_t b = this->X; // Assume second operand is in X
+        uint8_t low = (a & 0x0F) + (b & 0x0F);
+        uint8_t high = (a >> 4) + (b >> 4);
+        bool carry = false;
+
+        if (low > 9)
+        {
+            low -= 10;
+            high += 1;
+        }
+
+        if (high > 9)
+        {
+            high = 9; // Clamp to max BCD
+            carry = true;
+        }
+
+        this->A = (high << 4) | (low & 0x0F);
+
+        // Flag updates
+        setFlag(Z, (this->A == 0));
+        setFlag(C, carry);
+        setFlag(N, (this->A & 0x80) != 0);
+        setFlag(V, carry); // Treat overflow as V flag
+
+        break;
+    }
+
+    case 0x47: // SUBBCD
+    {
+        uint8_t a = this->A;
+        uint8_t b = this->X; // Assume second operand is in X
+        int8_t low = (a & 0x0F) - (b & 0x0F);
+        int8_t high = (a >> 4) - (b >> 4);
+        bool borrow = false;
+
+        if (low < 0)
+        {
+            low += 10;
+            high -= 1;
+        }
+
+        if (high < 0)
+        {
+            high = 0; // Clamp to zero
+            borrow = true;
+        }
+
+        this->A = ((high & 0x0F) << 4) | (low & 0x0F);
+
+        // Flag updates
+        setFlag(Z, (this->A == 0));
+        setFlag(C, !borrow); // Carry clear means borrow occurred
+        setFlag(N, (this->A & 0x80) != 0);
+        setFlag(V, borrow); // Treat borrow as overflow
+
         break;
     }
 

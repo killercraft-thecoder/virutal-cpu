@@ -77,6 +77,10 @@ OPCODES = {
     'JSRI': 0x40,  # Jump to SubRoutine Indirect
     'BX': 0x41,
     'BAX':0x42,
+    'DECOD':0x44,
+    'DECBIN':0x45,
+    'ADDBCD':0x46,
+    'SUBBCD':0x47,
 
 
 
@@ -138,7 +142,10 @@ SIZES = {
 0x40: 3,  # opcode + 16-bit pointer address
 0x41: 1,  # opcode only
 0x42:1, # opcode only
-
+0x44:1,
+0x45:1,
+0x46:1,
+0x47:1
 
 }
 
