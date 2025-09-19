@@ -86,6 +86,8 @@ OPCODES = {
     'LD2':0x4A,
     'ST2':0x4B,
     'TST':0x4C,
+    'NIBSWAP':0x4D,
+    'NIBSWAPX':0x4E,
 
 
 
@@ -155,6 +157,8 @@ SIZES = {
 0x4A:3,
 0x4B:3,
 0x4C:1,
+0x4D:1,
+0x4E:1,
 }
 
 # ---------------- Utilities ----------------

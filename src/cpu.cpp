@@ -4,84 +4,86 @@
 // Cycle counts for each opcode (0x00–0xFF)
 // Unused opcodes default to 0 cycles for now.
 static const uint8_t CYCLES[256] = {
-    /*0x00*/ 2,  // NOP
-    /*0x01*/ 4,  // LDA abs
-    /*0x02*/ 5,  // STA abs
-    /*0x03*/ 2,  // ADD (A = A + X)
-    /*0x04*/ 2,  // SUB (A = A - X)
-    /*0x05*/ 2,  // INC A
-    /*0x06*/ 2,  // DEC A
-    /*0x07*/ 2,  // XTA
-    /*0x08*/ 2,  // ATX
-    /*0x09*/ 4,  // LDX abs
-    /*0x0A*/ 5,  // STX abs
-    /*0x0B*/ 3,  // BR rel
-    /*0x0C*/ 4,  // BNZ abs
-    /*0x0D*/ 4,  // BZ abs
-    /*0x0E*/ 4,  // BN abs
-    /*0x0F*/ 4,  // BP abs
-    /*0x10*/ 6,  // JSR abs
-    /*0x11*/ 4,  // RTS
-    /*0x12*/ 5,  // BSR rel
-    /*0x13*/ 4,  // BC abs
-    /*0x14*/ 3,  // BCR rel
-    /*0x15*/ 3,  // BNR rel
-    /*0x16*/ 3,  // BPR rel
-    /*0x17*/ 4,  // BP abs
-    /*0x18*/ 4,  // BN abs
-    /*0x19*/ 3,  // XSRA
-    /*0x1A*/ 3,  // XSLA
-    /*0x1B*/ 3,  // ASRX
-    /*0x1C*/ 3,  // ASLX
-    /*0x1D*/ 2,  // AND
-    /*0x1E*/ 2,  // OR
-    /*0x1F*/ 2,  // XOR/EOR
-    /*0x20*/ 2,  // CLF
-    /*0x21*/ 2,  // CLC
-    /*0x22*/ 2,  // CLN
-    /*0x23*/ 2,  // CLZ
-    /*0x24*/ 2,  // XXA
-    /*0x25*/ 5,  // BRR rel
-    /*0x26*/ 4,  // RTR
-    /*0x27*/ 3,  // BA
-    /*0x28*/ 2,  // ADDF
-    /*0x29*/ 2,  // SUBF
-    /*0x2A*/ 4,  // BNC abs
-    /*0x2B*/ 3,  // BNCR rel
-    /*0x2C*/ 3,  // PHA
-    /*0x2D*/ 3,  // PLA
-    /*0x2E*/ 3,  // PHX
-    /*0x2F*/ 3,  // PLX
-    /*0x30*/ 2,  // NOTA
-    /*0x31*/ 2,  // NOTX
-    /*0x32*/ 2,  // NEG
-    /*0x33*/ 2,  // SWAP
-    /*0x34*/ 2,  // (reserved/simple op)
-    /*0x35*/ 2,  // (reserved/simple op)
-    /*0x36*/ 3,  // (reserved/simple op)
-    /*0x37*/ 2,  // (reserved/simple op)
-    /*0x38*/ 2,  // ROL A
-    /*0x39*/ 2,  // ROR A
-    /*0x3A*/ 2,  // ASL A
-    /*0x3B*/ 2,  // ASR A
-    /*0x3C*/ 4,  // BVS abs
-    /*0x3D*/ 4,  // BVC abs
-    /*0x3E*/ 3,  // BVS rel
-    /*0x3F*/ 3,  // BVC rel
-    /*0x40*/ 6,  // JSRI
-    /*0x41*/ 2,  // BX
-    /*0x42*/ 3,  // BAX
-    /*0x43*/ 2,  // (reserved/simple op)
-    /*0x44*/ 18, // DECOD
-    /*0x45*/ 13, // DECBIN
-    /*0x46*/ 16, // ADDBCD
-    /*0x47*/ 19, // SUBBCD
-    /*0x48*/ 6,  // LDAD
-    /*0x49*/ 6,  // LDSUB
-    /*0x4A*/ 4,  // LD2
-    /*0x4B*/ 4,  // ST2
-    /*0x4E*/ 2,  // (reserved/simple op)
-    /*0x4F*/ 2,  // (reserved/simple op)
+    /*0x00*/ 2,   // NOP
+    /*0x01*/ 4,   // LDA abs
+    /*0x02*/ 5,   // STA abs
+    /*0x03*/ 2,   // ADD (A = A + X)
+    /*0x04*/ 2,   // SUB (A = A - X)
+    /*0x05*/ 2,   // INC A
+    /*0x06*/ 2,   // DEC A
+    /*0x07*/ 2,   // XTA
+    /*0x08*/ 2,   // ATX
+    /*0x09*/ 4,   // LDX abs
+    /*0x0A*/ 5,   // STX abs
+    /*0x0B*/ 3,   // BR rel
+    /*0x0C*/ 4,   // BNZ abs
+    /*0x0D*/ 4,   // BZ abs
+    /*0x0E*/ 4,   // BN abs
+    /*0x0F*/ 4,   // BP abs
+    /*0x10*/ 6,   // JSR abs
+    /*0x11*/ 4,   // RTS
+    /*0x12*/ 5,   // BSR rel
+    /*0x13*/ 4,   // BC abs
+    /*0x14*/ 3,   // BCR rel
+    /*0x15*/ 3,   // BNR rel
+    /*0x16*/ 3,   // BPR rel
+    /*0x17*/ 4,   // BP abs
+    /*0x18*/ 4,   // BN abs
+    /*0x19*/ 3,   // XSRA
+    /*0x1A*/ 3,   // XSLA
+    /*0x1B*/ 3,   // ASRX
+    /*0x1C*/ 3,   // ASLX
+    /*0x1D*/ 2,   // AND
+    /*0x1E*/ 2,   // OR
+    /*0x1F*/ 2,   // XOR/EOR
+    /*0x20*/ 2,   // CLF
+    /*0x21*/ 2,   // CLC
+    /*0x22*/ 2,   // CLN
+    /*0x23*/ 2,   // CLZ
+    /*0x24*/ 2,   // XXA
+    /*0x25*/ 5,   // BRR rel
+    /*0x26*/ 4,   // RTR
+    /*0x27*/ 3,   // BA
+    /*0x28*/ 2,   // ADDF
+    /*0x29*/ 2,   // SUBF
+    /*0x2A*/ 4,   // BNC abs
+    /*0x2B*/ 3,   // BNCR rel
+    /*0x2C*/ 3,   // PHA
+    /*0x2D*/ 3,   // PLA
+    /*0x2E*/ 3,   // PHX
+    /*0x2F*/ 3,   // PLX
+    /*0x30*/ 2,   // NOTA
+    /*0x31*/ 2,   // NOTX
+    /*0x32*/ 2,   // NEG
+    /*0x33*/ 2,   // SWAP
+    /*0x34*/ 2,   // (reserved/simple op)
+    /*0x35*/ 2,   // (reserved/simple op)
+    /*0x36*/ 3,   // (reserved/simple op)
+    /*0x37*/ 2,   // (reserved/simple op)
+    /*0x38*/ 2,   // ROL A
+    /*0x39*/ 2,   // ROR A
+    /*0x3A*/ 2,   // ASL A
+    /*0x3B*/ 2,   // ASR A
+    /*0x3C*/ 4,   // BVS abs
+    /*0x3D*/ 4,   // BVC abs
+    /*0x3E*/ 3,   // BVS rel
+    /*0x3F*/ 3,   // BVC rel
+    /*0x40*/ 6,   // JSRI
+    /*0x41*/ 2,   // BX
+    /*0x42*/ 3,   // BAX
+    /*0x43*/ 2,   // (reserved/simple op)
+    /*0x44*/ 18,  // DECOD
+    /*0x45*/ 13,  // DECBIN
+    /*0x46*/ 16,  // ADDBCD
+    /*0x47*/ 19,  // SUBBCD
+    /*0x48*/ 6,   // LDAD
+    /*0x49*/ 6,   // LDSUB
+    /*0x4A*/ 4,   // LD2
+    /*0x4B*/ 4,   // ST2
+    /* 0x4C */ 2, // TST
+    /*0x4D*/ 2,   // NIBSWAP
+    /*0x4E*/ 2,   // NIBSWAPX
+    /*0x4F*/ 3,   // MIXAX
     // ... fill remaining unused opcodes with 2 cycles for now ...
     [0xFF] = 2 // HALT
 };
@@ -984,6 +986,60 @@ void CPU::step()
         setFlag(C, this->A >= this->X);                                // Carry if A ≥ X
         setFlag(N, result & 0x80);                                     // Negative if result is negative
         setFlag(V, ((this->A ^ this->X) & (this->A ^ result)) & 0x80); // Overflow detection
+
+        break;
+    }
+
+    case 0x4D: // NIBSWAP
+    {
+        this->A = ((this->A & 0x0F) << 4) | ((this->A & 0xF0) >> 4);
+
+        setFlag(Z, this->A == 0);
+        setFlag(N, this->A & 0x80);
+
+        break;
+    }
+
+    case 0x4E: // NIBSWAPX
+    {
+        this->X = ((this->X & 0x0F) << 4) | ((this->X & 0xF0) >> 4);
+
+        setFlag(Z, this->X == 0);
+        setFlag(N, this->X & 0x80);
+
+        break;
+    }
+
+    case 0x4F: // MIXAX
+    {
+        // Extract nibbles
+        uint8_t a_hi = (this->A & 0xF0) >> 4;
+        uint8_t a_lo = this->A & 0x0F;
+        uint8_t x_hi = (this->X & 0xF0) >> 4;
+        uint8_t x_lo = this->X & 0x0F;
+
+        // Cross-mix nibbles
+        uint8_t mixed_hi = a_hi ^ x_lo;
+        uint8_t mixed_lo = a_lo ^ x_hi;
+
+        // Combine and rotate A by 1 bit
+        uint8_t mixed_a = (mixed_hi << 4) | mixed_lo;
+        mixed_a = (mixed_a << 1) | (mixed_a >> 7);
+
+        // Update A
+        this->A = mixed_a;
+
+        // Mix X with new A, rotate right by 1 bit
+        uint8_t mixed_x = this->X ^ this->A;
+        mixed_x = (mixed_x >> 1) | (mixed_x << 7);
+        this->X = mixed_x;
+
+        // Feedback: XOR A with a rotated version of X
+        this->A ^= (this->X << 3) ^ (this->X >> 2);
+
+        // Set flags
+        setFlag(Z, (this->A | this->X) == 0);
+        setFlag(N, this->A & 0x80);
 
         break;
     }
