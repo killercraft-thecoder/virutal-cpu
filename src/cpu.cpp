@@ -835,21 +835,12 @@ void CPU::step()
         uint8_t bcd = this->A;
         uint8_t tens = (bcd >> 4) & 0x0F;
         uint8_t ones = bcd & 0x0F;
-        bool overflow = false;
-
-        if (tens > 9 || ones > 9)
-        {
-            overflow = true; // invalid BCD digits
-            tens = (tens > 9) ? 9 : tens;
-            ones = (ones > 9) ? 9 : ones;
-        }
 
         uint8_t binary = tens * 10 + ones;
         this->A = binary;
 
         // Flag updates
         setFlag(Z, (binary == 0)); // Zero flag
-        setFlag(C, overflow);      // Carry flag signals invalid BCD input
 
         break;
     }
