@@ -1,6 +1,6 @@
 # Virtual CPU – Instruction Set Reference
 
-This document lists all **68** currently implemented opcodes for the Virtual CPU, along with their hex codes, instruction sizes, and descriptions for quick reference.
+This document lists all **77** currently implemented opcodes for the Virtual CPU, along with their hex codes, instruction sizes, and descriptions for quick reference.
 
 | Hex    | Mnemonic   | Size (bytes) | Description                                                                           | Base Cycles                                                                                                         | +1 if branch taken |
 | ------ | ---------- | ------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------ |
