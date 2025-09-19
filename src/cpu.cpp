@@ -177,6 +177,10 @@ void CPU::run()
     }
 }
 
+/** 
+ * @struct
+ * @short Perfom a Single Cycle.
+*/
 void CPU::step()
 {
 
