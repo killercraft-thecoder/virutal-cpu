@@ -3,16 +3,23 @@
 ; -------------------
 ; Constants / Memory Map
 ; -------------------
-.equ TaskIndex    $1000   ; current task index (0..3)
-.equ Counter1     $1001
-.equ Counter2     $1002
-.equ Counter3     $1003
-.equ Counter4     $1004
 
-.equ Const0 0
-.equ Const1 1
-.equ Const2 2
-.equ Const4 4
+.equ TaskIndex   $1000   ; current task index (0..3)
+.equ Counter1    $1001   ; input/output for Task1
+.equ Counter2    $1002   ; input/output for Task2
+.equ Counter3    $1003   ; input/output for Task3
+.equ Counter4    $1004   ; input/output for Task4
+
+.equ TempN1      $1010   ; Fib accumulator 1
+.equ TempN2      $1011   ; Fib accumulator 2
+.equ TempI,      $1012   ; Fib loop counter
+
+.equ Const0     0
+.equ Const1     1
+.equ Const2      2
+.equ Const4      4
+
+
 
 ; -------------------
 ; Main
@@ -93,29 +100,90 @@ Y_Go3:
         B Task3
 
 ; -------------------
-; Tasks: do work then B to Yield (no stack involvement)
+; Task1: run Fib on Counter1
 ; -------------------
 Task1:
         LDA Counter1
-        INC
-        STA Counter1
-        B Yield
+        STA TempI
+        B FibRoutine
 
+; -------------------
+; Task2: tweak Counter2, then run Fib
+; -------------------
 Task2:
         LDA Counter2
         INC
         STA Counter2
-        B Yield
+        LDA Counter2
+        STA TempI
+        B FibRoutine
 
+; -------------------
+; Task3: tweak Counter3, then run Fib
+; -------------------
 Task3:
         LDA Counter3
-        INC
+        DEC
         STA Counter3
-        B Yield
+        LDA Counter3
+        STA TempI
+        B FibRoutine
 
+; -------------------
+; Task4: tweak Counter4, then run Fib
+; -------------------
 Task4:
         LDA Counter4
-        INC
+        ADD Counter1    ; just an example tweak
+        STA Counter4
+        LDA Counter4
+        STA TempI
+        B FibRoutine
+
+; -------------------
+; Shared Fibonacci routine
+; Input: TempI = N
+; Output: A = Fib(N), also stored back into the calling task's counter
+; -------------------
+FibRoutine:
+        LDI Const0
+        STA TempN1
+        LDI Const1
+        STA TempN2
+
+FibLoop:
+        LDA TempI
+        BZ FibDone
+        DEC TempI
+        LDA TempN1
+        ADD TempN2
+        STA TempN2
+        LDA TempN2
+        SUB TempN1
+        STA TempN1
+        B FibLoop
+
+FibDone:
+        LDA TempN1
+        ; Store result back into the correct counter based on TaskIndex
+        LDX TaskIndex
+        CPX Const0
+        BZ StoreC1
+        CPX Const1
+        BZ StoreC2
+        CPX Const2
+        BZ StoreC3
+        B StoreC4
+
+StoreC1:
+        STA Counter1
+        B Yield
+StoreC2:
+        STA Counter2
+        B Yield
+StoreC3:
+        STA Counter3
+        B Yield
+StoreC4:
         STA Counter4
         B Yield
-

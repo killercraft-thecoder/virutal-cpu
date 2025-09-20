@@ -147,3 +147,28 @@ While not matching the raw throughput of later 16/32‑bit processors, this desi
 ## Design Era Context
 
 A CPU of this performance class and clock rate would have been well‑suited to the demands of early‑ to mid‑1980s home computing. At approximately 1 MIPS, it could comfortably support text‑based applications, 2D tile‑based or sprite‑driven games, simple graphical user interfaces, and basic productivity software such as word processors and spreadsheets. Systems in this range were also capable of handling modest real‑time control tasks, educational software, and early networking or modem‑based communications. While not intended for heavy 3D graphics or large‑scale multitasking, such a processor would have provided a responsive, versatile platform for the era’s typical workloads.
+
+
+## Code and Data Memory Model
+
+In this CPU design, **all memory is read/write**, including the region where program instructions are stored.  
+There is no hardware‑enforced separation between "code" and "data" memory.
+
+### Implications
+- **Self‑modifying code is possible**: Programs can overwrite their own instructions at runtime to change behavior dynamically.
+- **No true ROM region**: Any address can be written to, so constants and code are not inherently protected.
+- **Variable placement matters**: Placing variables in the same addresses as program code will overwrite instructions, potentially causing crashes or unexpected behavior.
+
+### Uses
+- Dynamic patching of instructions (e.g., changing branch targets or constants on the fly).
+- Generating new code sequences in RAM and executing them.
+- Implementing certain optimizations or obfuscation techniques.
+
+### Risks
+- Accidental overwrites of program code if variables are placed incorrectly.
+- Debugging complexity: behavior may change between runs if code is modified at runtime.
+- Potential for non‑deterministic bugs.
+
+**Recommendation:**  
+When writing programs, clearly separate code and data regions (e.g., code in `$0000–$1000`, data in `$1000–$1999`) to avoid unintended self‑modification unless it is an intentional part of the program's design.
+Also Avoid addresses from `$2000-20FF` becuase the stack page is there.
