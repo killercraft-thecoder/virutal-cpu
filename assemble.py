@@ -88,6 +88,8 @@ OPCODES = {
     'TST':0x4C,
     'NIBSWAP':0x4D,
     'NIBSWAPX':0x4E,
+    'MIXAX':0x4F,
+    'LDI':0x50,
 
 
 
@@ -159,6 +161,8 @@ SIZES = {
 0x4C:1,
 0x4D:1,
 0x4E:1,
+0x4F:1,
+0x50:3
 }
 
 # ---------------- Utilities ----------------
@@ -535,7 +539,7 @@ def main() -> None:
             fh.write(blob)
         endtime = time.monotonic()
         # Print a short note to stderr
-        sys.stderr.write(f"Wrote ROM: {out_path} Built ROM in {(endtime-starttime) * 1000} milliseconds.\n")
+        sys.stderr.write(f"Wrote ROM: {out_path} Built ROM in {(endtime-starttime) * 1000} milliseconds.\n ROM Size bytes:{len(blob) - 12} Excluding 12-byte Header.")
 
 if __name__ == "__main__":
     main()

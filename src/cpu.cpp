@@ -177,10 +177,10 @@ void CPU::run()
     }
 }
 
-/** 
+/**
  * @struct
  * @short Perfom a Single Cycle.
-*/
+ */
 void CPU::step()
 {
 
@@ -1045,6 +1045,13 @@ void CPU::step()
         setFlag(Z, (this->A | this->X) == 0);
         setFlag(N, this->A & 0x80);
 
+        break;
+    }
+
+    case 0x50: // LDI
+    {
+        uint16_t val = read16();
+        this->A = val & 0xFF; // ignore high.
         break;
     }
 

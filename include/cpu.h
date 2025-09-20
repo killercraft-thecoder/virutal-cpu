@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-static constexpr uint16_t STACK_BASE = 0x0200; // start of stack page
+static constexpr uint16_t STACK_BASE = 0x1200; // start of stack page
 
 struct CPU
 {
