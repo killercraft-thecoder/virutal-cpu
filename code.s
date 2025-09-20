@@ -25,7 +25,7 @@ Main:
         STA Counter4
         STA TaskIndex
 
-        BR Task1         ; start with Task1
+        B Task1         ; start with Task1
 
 ; -------------------
 ; Yield: save A/X on entry, restore before every exit
@@ -67,7 +67,7 @@ Yield:
         ; else -> 3
         PLX
         PLA
-        BR Task4
+        B Task4
 
 Y_Wrap:
         LDI Const0
@@ -75,47 +75,47 @@ Y_Wrap:
         ; after wrap, next is Task1
         PLX
         PLA
-        BR Task1
+        B Task1
 
 Y_Go1:
         PLX
         PLA
-        BR Task1
+        B Task1
 
 Y_Go2:
         PLX
         PLA
-        BR Task2
+        B Task2
 
 Y_Go3:
         PLX
         PLA
-        BR Task3
+        B Task3
 
 ; -------------------
-; Tasks: do work then BR to Yield (no stack involvement)
+; Tasks: do work then B to Yield (no stack involvement)
 ; -------------------
 Task1:
         LDA Counter1
         INC
         STA Counter1
-        BR Yield
+        B Yield
 
 Task2:
         LDA Counter2
         INC
         STA Counter2
-        BR Yield
+        B Yield
 
 Task3:
         LDA Counter3
         INC
         STA Counter3
-        BR Yield
+        B Yield
 
 Task4:
         LDA Counter4
         INC
         STA Counter4
-        BR Yield
+        B Yield
 
