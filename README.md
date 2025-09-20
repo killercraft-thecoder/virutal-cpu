@@ -2,6 +2,11 @@
 
 This document lists all **81** currently implemented opcodes for the Virtual CPU, along with their hex codes, instruction sizes, and descriptions for quick reference.
 
+## Note:
+Dont Take HEx Codes for Granted are (innaccurate) an may miss opcodes like B (Branch)
+
+## Opcodes:
+
 | Hex    | Mnemonic   | Size (bytes) | Description                                                                                     | Base Cycles                                                                                                         | +1 if branch taken |
 | ------ | ---------- | ------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------ |
 | 0x00   | NOP        | 1            | No operation.                                                                                   | 2                                                                                                                   | No                 |

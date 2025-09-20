@@ -15,7 +15,7 @@
 .equ Const4 4
 
 ; -------------------
-; Main init
+; Main
 ; -------------------
 Main:
         LDI Const0
@@ -27,61 +27,73 @@ Main:
 
         BR Task1         ; start with Task1
 
-
 ; -------------------
-; Yield routine
+; Yield: save A/X on entry, restore before every exit
+; No JSR/RTS used anywhere -> pushes cannot be mistaken as return addresses.
 ; -------------------
 Yield:
-        ; Increment index
+        ; Save caller-scratch so we can freely use A/X here
+        PHA
+        PHX
+
+        ; index++
         LDA TaskIndex
         INC
         STA TaskIndex
 
-        ; Wrap if index == 4
+        ; A := TaskIndex for all subsequent SUBF compares
         LDA TaskIndex
+
+        ; wrap if index == 4
         LDX Const4
         SUBF
-        BZ WrapToZero
-        BR CheckTask0
+        BZ Y_Wrap
 
-WrapToZero:
-        LDI Const0
-        STA TaskIndex
-
-CheckTask0:
         ; index == 0 ?
-        LDA TaskIndex
         LDX Const0
         SUBF
-        BZ GoTask1
+        BZ Y_Go1
 
         ; index == 1 ?
-        LDA TaskIndex
         LDX Const1
         SUBF
-        BZ GoTask2
+        BZ Y_Go2
 
         ; index == 2 ?
-        LDA TaskIndex
         LDX Const2
         SUBF
-        BZ GoTask3
+        BZ Y_Go3
 
-        ; else must be 3
-        BR GoTask4
+        ; else -> 3
+        PLX
+        PLA
+        BR Task4
 
+Y_Wrap:
+        LDI Const0
+        STA TaskIndex
+        ; after wrap, next is Task1
+        PLX
+        PLA
+        BR Task1
+
+Y_Go1:
+        PLX
+        PLA
+        BR Task1
+
+Y_Go2:
+        PLX
+        PLA
+        BR Task2
+
+Y_Go3:
+        PLX
+        PLA
+        BR Task3
 
 ; -------------------
-; Dispatch labels
-; -------------------
-GoTask1: BR Task1
-GoTask2: BR Task2
-GoTask3: BR Task3
-GoTask4: BR Task4
-
-
-; -------------------
-; Tasks
+; Tasks: do work then BR to Yield (no stack involvement)
 ; -------------------
 Task1:
         LDA Counter1
@@ -106,3 +118,4 @@ Task4:
         INC
         STA Counter4
         BR Yield
+
