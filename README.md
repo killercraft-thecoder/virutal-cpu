@@ -83,6 +83,7 @@ This document lists all **81** currently implemented opcodes for the Virtual CPU
 | 0x4D   | NIBSWAP    | 1            | Swap high and low nibbles of A. Useful for BCD digit rotation and fixed-point math.             | 2                                                                                                                   | No                 |
 | 0x4E   | NIBSWAPX   | 1            | Swap high and low nibbles of X. Useful for BCD digit rotation and fixed-point math.             | 2                                                                                                                   | No                 |
 | 0x4F   | MIXAX      | 1            | Mix A and X using nibble XOR and bit rotation. Produces 65,536 unique hashes from 16-bit state. | 3                                                                                                                   | No                 |
+| 0x50   | LDI      | 1            | Load a 8-bit immdieate (16-bit internally tgoygh higher byte ignored) into A register. | 3                                                                                                                   | No                 |
 
 ---
 
