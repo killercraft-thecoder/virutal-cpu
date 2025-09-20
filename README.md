@@ -172,3 +172,34 @@ There is no hardware‑enforced separation between "code" and "data" memory.
 **Recommendation:**  
 When writing programs, clearly separate code and data regions (e.g., code in `$0000–$1000`, data in `$1000–$1999`) to avoid unintended self‑modification unless it is an intentional part of the program's design.
 Also Avoid addresses from `$2000-20FF` becuase the stack page is there.
+
+### Example: Self‑Modifying Code
+
+The following program changes one of its own instructions at runtime.
+It starts with an `LDI 1` instruction in memory, then overwrites the
+immediate value with `5` before executing it again.
+
+```asm
+
+        .org $0000
+
+Start:
+        LDI 1           ; Load immediate 1 into A
+        STA $0010       ; Store A into a data cell
+        ; --- Self‑modification happens here ---
+        LDI 5
+        STA PatchValue  ; Overwrite the operand of the LDI below
+        ; --- Execute the patched instruction ---
+PatchInstr:
+PatchOp:  .byte $50     ; opcode for LDI
+PatchValue:
+          .byte 1       ; this will be changed to 5 at runtime
+        NOP
+        HALT
+
+; Notes:
+; - PatchInstr is part of the program itself.
+; - STA PatchValue writes into the code region, changing the operand.
+; - When execution reaches PatchInstr again, it will load 5 instead of 1
+
+```
