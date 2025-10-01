@@ -310,7 +310,7 @@ void CPU::step()
 
         // Push return address = address of last byte of JSR
         uint16_t ret = PC - 1;
-        push8((ret >> 8) & 0xFF); // high byte first or low byte first depending on your convention
+        push8((ret >> 8) & 0xFF); // high byte first
         push8(ret & 0xFF);
 
         PC = target;

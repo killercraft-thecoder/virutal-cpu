@@ -155,24 +155,43 @@ FibLoop:
         LDA TempI
         BZ FibDone
         DEC TempI
+
+        ; A = TempN1 + TempN2
         LDA TempN1
-        ADD TempN2
+        LDX TempN2
+        ADD
         STA TempN2
+
+        ; A = TempN2 - TempN1  (old n2 - old n1)
         LDA TempN2
-        SUB TempN1
+        LDX TempN1
+        SUB
         STA TempN1
+
         B FibLoop
 
 FibDone:
         LDA TempN1
-        ; Store result back into the correct counter based on TaskIndex
-        LDX TaskIndex
-        CPX Const0
+
+        ; Compare TaskIndex to 0
+        LDX Const0
+        LDA TaskIndex
+        SUBF
         BZ StoreC1
-        CPX Const1
+
+        ; Compare TaskIndex to 1
+        LDX Const1
+        LDA TaskIndex
+        SUBF
         BZ StoreC2
-        CPX Const2
+
+        ; Compare TaskIndex to 2
+        LDX Const2
+        LDA TaskIndex
+        SUBF
         BZ StoreC3
+
+        ; Else -> TaskIndex == 3
         B StoreC4
 
 StoreC1:
